@@ -15,13 +15,19 @@ const getContactById = async (contactId) => {
 const addContact = async (body) => {
   const createId = nanoid()
 
-  return await db.push({ id: createId, ...body }).write()
+  const createContact = { id: createId, ...body }
+
+  await db.push(createContact).write()
+
+  return createContact
 }
 
 const removeContact = async (contactId) => {
   const id = normalizeId(contactId)
 
-  return await db.remove({ id }).write()
+  const [contact] = await db.remove({ id }).write()
+
+  return contact
 }
 
 const updateContact = async (contactId, body) => {

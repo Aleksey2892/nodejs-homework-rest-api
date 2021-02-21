@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Contacts = require('../../model')
 const HttpCodes = require('../../helpers/httpCodes')
+const { schemaCreateContact, schemaUpdateContact } = require('./validation')
 
 router.get('/', async (_req, res, next) => {
   try {
@@ -29,7 +30,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', schemaCreateContact, async (req, res, next) => {
   const { body } = req
 
   try {
@@ -37,10 +38,6 @@ router.post('/', async (req, res, next) => {
 
     if (newContact) {
       return res.status(HttpCodes.CREATED).json(newContact)
-    } else {
-      return res
-        .status(HttpCodes.BAD_REQUEST)
-        .json({ message: 'missing required name field' })
     }
   } catch (error) {
     next(error)
@@ -63,7 +60,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', schemaUpdateContact, async (req, res, next) => {
   const { params, body } = req
   const { contactId } = params
 

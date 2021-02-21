@@ -21,7 +21,7 @@ app.use((_req, res) => {
 
 app.use((err, _req, res, _next) => {
   res
-    .status(HttpCodes.SERVER_ERROR)
+    .status(err.status || HttpCodes.SERVER_ERROR)
     .json({ message: err.message || 'unknown error' })
 })
 

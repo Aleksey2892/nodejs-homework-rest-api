@@ -62,7 +62,12 @@
   {
     "id": "VzuLumr02_TI3wXii-XnI",
     "name": "Aleksey Gry",
-    "email": "aleksey2892@gmail.com",
+    "email": "alex@gmail.com",
     "phone": "050"
+  },
+  {
+    "id": "k9bw1434QYTlWidTnR9Eg",
+    "name": "Test Name",
+    "email": "test@gmail.com"
   }
 ]

@@ -1,15 +1,42 @@
-// const fs = require('fs/promises')
-// const contacts = require('./contacts.json')
+const db = require('./db')
+const { nanoid } = require('nanoid')
+const normalizeId = require('./helpers')
 
-const listContacts = async () => {}
+const listContacts = async () => {
+  return await db.value()
+}
 
-const getContactById = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const id = normalizeId(contactId)
 
-const removeContact = async (contactId) => {}
+  return await db.find({ id }).value()
+}
 
-const addContact = async (body) => {}
+const addContact = async (body) => {
+  const createId = nanoid()
 
-const updateContact = async (contactId, body) => {}
+  const createContact = { id: createId, ...body }
+
+  await db.push(createContact).write()
+
+  return createContact
+}
+
+const removeContact = async (contactId) => {
+  const id = normalizeId(contactId)
+
+  const [contact] = await db.remove({ id }).write()
+
+  return contact
+}
+
+const updateContact = async (contactId, body) => {
+  const id = normalizeId(contactId)
+
+  const updatedContact = await db.find({ id }).assign(body).write()
+
+  return updatedContact.id ? updatedContact : null
+}
 
 module.exports = {
   listContacts,

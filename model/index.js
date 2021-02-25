@@ -1,41 +1,53 @@
 const db = require('./db')
-const { nanoid } = require('nanoid')
-const normalizeId = require('./helpers')
+const { ObjectId } = require('mongodb')
+const { getCollection } = require('./helpers')
 
 const listContacts = async () => {
-  return await db.value()
+  const collection = await getCollection(db, 'contacts')
+
+  return await collection.find().toArray()
 }
 
 const getContactById = async (contactId) => {
-  const id = normalizeId(contactId)
+  const _id = new ObjectId(contactId)
+  const collection = await getCollection(db, 'contacts')
 
-  return await db.find({ id }).value()
-}
-
-const addContact = async (body) => {
-  const createId = nanoid()
-
-  const createContact = { id: createId, ...body }
-
-  await db.push(createContact).write()
-
-  return createContact
-}
-
-const removeContact = async (contactId) => {
-  const id = normalizeId(contactId)
-
-  const [contact] = await db.remove({ id }).write()
+  const [contact] = await collection.find({ _id }).toArray()
 
   return contact
 }
 
+const addContact = async (body) => {
+  const createContact = { ...body }
+
+  const collection = await getCollection(db, 'contacts')
+  const {
+    ops: [newContact],
+  } = await collection.insert(createContact)
+
+  return newContact
+}
+
+const removeContact = async (contactId) => {
+  const _id = new ObjectId(contactId)
+  const collection = await getCollection(db, 'contacts')
+
+  const { value: deletedContact } = await collection.findOneAndDelete({ _id })
+
+  return deletedContact
+}
+
 const updateContact = async (contactId, body) => {
-  const id = normalizeId(contactId)
+  const _id = new ObjectId(contactId)
+  const collection = await getCollection(db, 'contacts')
 
-  const updatedContact = await db.find({ id }).assign(body).write()
+  const { value: updatedContact } = await collection.findOneAndUpdate(
+    { _id },
+    { $set: body },
+    { returnOriginal: false }
+  )
 
-  return updatedContact.id ? updatedContact : null
+  return updatedContact
 }
 
 module.exports = {

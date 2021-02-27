@@ -1,26 +1,44 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 const { Schema } = mongoose
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    min: 3,
-    max: 50,
-    required: [true, 'Вы должны ввести имя контакта'],
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      min: 2,
+      max: 50,
+      required: [true, 'Вы должны ввести имя контакта'],
+    },
+    email: {
+      type: String,
+      min: 3,
+      max: 50,
+      required: [true, 'Вы должны ввести емеил контакта'],
+      unique: true,
+    },
+    phone: {
+      type: String,
+      min: 1,
+      max: 50,
+    },
+    subscription: {
+      type: String,
+      default: 'free',
+    },
+    password: {
+      type: String,
+      required: [true, 'Вы должны ввести пароль'],
+    },
+    token: {
+      type: String,
+      default: '',
+    },
   },
-  email: {
-    type: String,
-    min: 3,
-    max: 50,
-    required: [true, 'Вы должны ввести емеил контакта'],
-    unique: true,
-  },
-  phone: {
-    type: String,
-    min: 1,
-    max: 50,
-  },
-})
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+)
 
 const Contact = mongoose.model('contact', contactSchema)
 

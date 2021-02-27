@@ -5,6 +5,8 @@ const DB_CONNECT = process.env.DB_CONNECT
 const db = mongoose.connect(DB_CONNECT, {
   useFindAndModify: false,
   useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
 
 mongoose.connection.on('connected', () =>

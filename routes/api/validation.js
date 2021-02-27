@@ -2,15 +2,21 @@ const Joi = require('joi')
 const HttpCodes = require('../../helpers/httpCodes')
 
 const schemaCreateContact = Joi.object({
-  name: Joi.string().min(3).max(50).required(),
+  name: Joi.string().min(2).max(50).required(),
   email: Joi.string().min(3).max(50).required(),
   phone: Joi.string().alphanum().min(1).max(50).optional(),
+  subscription: Joi.string().alphanum().optional(),
+  password: Joi.string().alphanum().required(),
+  token: Joi.string().optional(),
 })
 
 const schemaUpdateContact = Joi.object({
-  name: Joi.string().min(3).max(50).optional(),
+  name: Joi.string().min(2).max(50).optional(),
   email: Joi.string().min(3).max(50).optional(),
   phone: Joi.string().alphanum().min(1).max(50).optional(),
+  subscription: Joi.string().alphanum().optional(),
+  password: Joi.string().alphanum().optional(),
+  token: Joi.string().optional(),
 })
 
 module.exports.schemaCreateContact = (req, _res, next) => {

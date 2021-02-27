@@ -1,12 +1,25 @@
 require('dotenv').config()
-const MongoClient = require('mongodb').MongoClient
+const mongoose = require('mongoose')
 const DB_CONNECT = process.env.DB_CONNECT
 
-const db = MongoClient.connect(DB_CONNECT, { useUnifiedTopology: true })
+const db = mongoose.connect(DB_CONNECT, {
+  useFindAndModify: false,
+  useCreateIndex: true,
+})
+
+mongoose.connection.on('connected', () =>
+  console.log('Mongoose connected to db')
+)
+mongoose.connection.on('error', (error) =>
+  console.log(`Mongoose connection error: ${error.message}`)
+)
+mongoose.connection.on('disconnected', () =>
+  console.log('Mongoose disconnected')
+)
 
 process.on('SIGINT', async () => {
-  await db.close()
-  console.log('db connection is closed')
+  await mongoose.connection.close()
+  console.log('Mongoose connection closed and app exit')
   process.exit(1)
 })
 

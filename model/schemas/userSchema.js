@@ -24,7 +24,7 @@ const userSchema = new Schema(
       default: UserSchema.subscription[0],
     },
     token: {
-      String,
+      type: String,
       default: null,
     },
   },

@@ -1,7 +1,7 @@
 const User = require('./schemas/userSchema')
 
-const create = (email, password) => {
-  const user = new User({ email, password })
+const create = async (email, password) => {
+  const user = await new User({ email, password })
   return user.save()
 }
 

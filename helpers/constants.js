@@ -1,5 +1,8 @@
 const UserSchema = {
-  subscription: ['free', 'pro', 'premium'],
+  subscription: {
+    ENUM: ['free', 'pro', 'premium'],
+    DEFAULT: 'free',
+  },
 }
 
 module.exports = { UserSchema }

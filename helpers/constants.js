@@ -1,7 +1,9 @@
+const userSubscription = ['free', 'pro', 'premium']
+
 const UserSchema = {
   subscription: {
-    ENUM: ['free', 'pro', 'premium'],
-    DEFAULT: 'free',
+    ENUM: userSubscription,
+    DEFAULT: userSubscription[0],
   },
 }
 

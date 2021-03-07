@@ -39,7 +39,7 @@ userSchema.path('email').validate(function (value) {
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next()
 
-  const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR
+  const SALT_WORK_FACTOR = Number(process.env.SALT_WORK_FACTOR)
 
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
   this.password = await bcrypt.hash(this.password, salt, null)

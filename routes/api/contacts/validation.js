@@ -6,8 +6,6 @@ const schemaCreateContact = Joi.object({
   email: Joi.string().min(3).max(50).required(),
   phone: Joi.string().alphanum().min(1).max(50).optional(),
   subscription: Joi.string().alphanum().optional(),
-  password: Joi.string().alphanum().required(),
-  token: Joi.string().optional(),
 })
 
 const schemaUpdateContact = Joi.object({
@@ -15,8 +13,6 @@ const schemaUpdateContact = Joi.object({
   email: Joi.string().min(3).max(50).optional(),
   phone: Joi.string().alphanum().min(1).max(50).optional(),
   subscription: Joi.string().alphanum().optional(),
-  password: Joi.string().alphanum().optional(),
-  token: Joi.string().optional(),
 })
 
 module.exports.schemaCreateContact = (req, _res, next) => {

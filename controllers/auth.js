@@ -1,6 +1,8 @@
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const Users = require('../model/users')
 const HttpCodes = require('../helpers/httpCodes')
+const JWT_SECRET = process.env.JWT_SECRET
 
 const register = async (req, res, next) => {
   const { email, password } = req.body
@@ -15,6 +17,7 @@ const register = async (req, res, next) => {
     }
 
     const newUser = await Users.create(email, password)
+
     return res.status(HttpCodes.CREATED).json({
       user: {
         email: newUser.email,
@@ -26,4 +29,61 @@ const register = async (req, res, next) => {
   }
 }
 
-module.exports = { register }
+const login = async (req, res, next) => {
+  const { email, password } = req.body
+
+  try {
+    const user = await Users.findByEmail(email)
+
+    if (!user || !user.validPassword(password)) {
+      return res.status(HttpCodes.UNAUTHORIZED).json({
+        message: 'Email or password is wrong',
+      })
+    }
+
+    const id = user._id
+    const payload = { id }
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' })
+
+    await Users.updateToken(id, token)
+
+    return res.status(HttpCodes.OK).json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const logout = async (req, res, next) => {
+  const userId = req.user.id
+
+  try {
+    await Users.updateToken(userId, null)
+
+    return res.status(HttpCodes.NO_CONTENT).json({})
+  } catch (error) {
+    next(error)
+  }
+}
+
+const current = async (req, res, next) => {
+  const userId = req.user.id
+
+  try {
+    const user = await Users.findById(userId)
+
+    return res.status(HttpCodes.OK).json({
+      email: user.email,
+      subscription: user.subscription,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { register, login, logout, current }

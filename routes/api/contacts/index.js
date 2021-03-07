@@ -2,16 +2,18 @@ const express = require('express')
 const router = express.Router()
 const { schemaCreateContact, schemaUpdateContact } = require('./validation')
 const contactsController = require('../../../controllers/contacts')
+const guard = require('../../../helpers/guard')
 
 router
-  .get('/', contactsController.getAllContacts)
-  .post('/', schemaCreateContact, contactsController.createContact)
+  .get('/', guard, contactsController.getAllContacts)
+  .post('/', guard, schemaCreateContact, contactsController.createContact)
 
 router
-  .get('/:contactId', contactsController.getContactById)
-  .delete('/:contactId', contactsController.removeContactById)
+  .get('/:contactId', guard, contactsController.getContactById)
+  .delete('/:contactId', guard, contactsController.removeContactById)
   .patch(
     '/:contactId',
+    guard,
     schemaUpdateContact,
     contactsController.updateContactById
   )

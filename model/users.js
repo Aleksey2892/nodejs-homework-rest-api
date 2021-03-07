@@ -1,15 +1,26 @@
 const User = require('./schemas/userSchema')
 
-const create = async (email, password) => {
-  const user = await new User({ email, password })
+const create = (email, password) => {
+  const user = new User({ email, password })
+
   return user.save()
+}
+
+const findById = (id) => {
+  return User.findOne({ _id: id })
 }
 
 const findByEmail = (email) => {
   return User.findOne({ email })
 }
 
+const updateToken = (id, token) => {
+  return User.updateOne({ _id: id }, { token })
+}
+
 module.exports = {
   create,
+  findById,
   findByEmail,
+  updateToken,
 }

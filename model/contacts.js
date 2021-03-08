@@ -1,14 +1,16 @@
 const Contact = require('./schemas/contactSchema')
+const { UserSchema } = require('../helpers/constants')
+const filterDefault = UserSchema.subscription.ENUM
 
 const addContact = async (body) => {
   return await Contact.create(body)
 }
 
 const listContacts = async (userId, query) => {
-  const { page = '1', limit = '20' } = query
+  const { page = '1', limit = '20', sub: filter = filterDefault } = query
 
   const results = await Contact.paginate(
-    { owner: userId },
+    { owner: userId, subscription: filter },
     {
       page,
       limit,

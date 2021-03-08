@@ -34,8 +34,9 @@ const login = async (req, res, next) => {
 
   try {
     const user = await Users.findByEmail(email)
+    const isValidPassword = await user.validPassword(password)
 
-    if (!user || !user.validPassword(password)) {
+    if (!user || isValidPassword) {
       return res.status(HttpCodes.UNAUTHORIZED).json({
         message: 'Email or password is wrong',
       })

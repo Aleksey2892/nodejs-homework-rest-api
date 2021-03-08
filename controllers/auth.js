@@ -30,13 +30,13 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body
-
   try {
-    const user = await Users.findByEmail(email)
-    const isValidPassword = await user.validPassword(password)
+    const { email, password } = req.body
 
-    if (!user || isValidPassword) {
+    const user = await Users.findByEmail(email)
+    const isValidPassword = await user?.validPassword(password)
+
+    if (!user || !isValidPassword) {
       return res.status(HttpCodes.UNAUTHORIZED).json({
         message: 'Email or password is wrong',
       })

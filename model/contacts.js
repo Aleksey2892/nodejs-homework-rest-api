@@ -4,11 +4,26 @@ const addContact = async (body) => {
   return await Contact.create(body)
 }
 
-const listContacts = async (userId) => {
-  return await Contact.find({ owner: userId }).populate({
-    path: 'owner',
-    select: 'email',
-  })
+const listContacts = async (userId, query) => {
+  const { page = '1', limit = '20' } = query
+
+  const results = await Contact.paginate(
+    { owner: userId },
+    {
+      page,
+      limit,
+      populate: { path: 'owner', select: 'email' },
+    }
+  )
+  const { docs: contacts, totalDocs: totalContacts, totalPages } = results
+
+  return {
+    page,
+    limit,
+    totalContacts: totalContacts.toString(),
+    totalPages: totalPages.toString(),
+    contacts,
+  }
 }
 
 const getContactById = async (contactId, userId) => {
@@ -19,7 +34,7 @@ const getContactById = async (contactId, userId) => {
 }
 
 const updateContact = async (contactId, body, userId) => {
-  return await Contact.findByIdAndUpdate(
+  return await Contact.findOneAndUpdate(
     { _id: contactId, owner: userId },
     { ...body },
     { new: true }
@@ -28,7 +43,7 @@ const updateContact = async (contactId, body, userId) => {
 
 const removeContact = async (contactId, userId) => {
   console.log(contactId)
-  return await Contact.findByIdAndRemove({ _id: contactId, owner: userId })
+  return await Contact.findOneAndRemove({ _id: contactId, owner: userId })
 }
 
 module.exports = {

@@ -3,8 +3,10 @@ const HttpCodes = require('../helpers/httpCodes')
 
 const getAllContacts = async (req, res, next) => {
   const userId = req.user.id
+  const { query } = req
+
   try {
-    const contacts = await Contacts.listContacts(userId)
+    const contacts = await Contacts.listContacts(userId, query)
 
     return res.status(HttpCodes.OK).json(contacts)
   } catch (error) {

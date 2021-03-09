@@ -30,9 +30,9 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body
+  const { email, password } = req.body
 
+  try {
     const user = await Users.findByEmail(email)
     const isValidPassword = await user?.validPassword(password)
 
@@ -87,4 +87,25 @@ const current = async (req, res, next) => {
   }
 }
 
-module.exports = { register, login, logout, current }
+const updateSubscription = async (req, res, next) => {
+  const { subscription } = req.body
+  const userId = req.user.id
+
+  try {
+    const user = await Users.updateSubscription(userId, subscription)
+
+    console.log(user)
+
+    return res.status(HttpCodes.OK).json({
+      user,
+    })
+    // return res.status(HttpCodes.OK).json({
+    //   email: user.email,
+    //   subscription: user.subscription,
+    // })
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { register, login, logout, current, updateSubscription }

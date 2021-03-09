@@ -7,4 +7,4 @@ const UserSchema = {
   },
 }
 
-module.exports = { UserSchema }
+module.exports = { UserSchema, userSubscription }

@@ -1,6 +1,6 @@
 const Contact = require('./schemas/contactSchema')
-const { UserSchema } = require('../helpers/constants')
-const filterDefault = UserSchema.subscription.ENUM
+const { Subscriptions } = require('../helpers/constants')
+const filterDefault = Subscriptions.values
 
 const addContact = async (body) => {
   return await Contact.create(body)
@@ -44,7 +44,6 @@ const updateContact = async (contactId, body, userId) => {
 }
 
 const removeContact = async (contactId, userId) => {
-  console.log(contactId)
   return await Contact.findOneAndRemove({ _id: contactId, owner: userId })
 }
 

@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const HttpCodes = require('../../../helpers/httpCodes')
-const { userSubscription } = require('../../../helpers/constants')
+const { Subscriptions } = require('../../../helpers/constants')
 
 const createUser = Joi.object({
   email: Joi.string().min(3).max(50).required(),
@@ -18,7 +18,7 @@ const updateSubscrUser = Joi.object({
     .min(1)
     .max(50)
     .required()
-    .valid(...userSubscription),
+    .valid(...Subscriptions.values),
 })
 
 module.exports.createUser = (req, _res, next) => {

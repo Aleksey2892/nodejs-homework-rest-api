@@ -94,15 +94,10 @@ const updateSubscription = async (req, res, next) => {
   try {
     const user = await Users.updateSubscription(userId, subscription)
 
-    console.log(user)
-
     return res.status(HttpCodes.OK).json({
-      user,
+      email: user.email,
+      subscription: user.subscription,
     })
-    // return res.status(HttpCodes.OK).json({
-    //   email: user.email,
-    //   subscription: user.subscription,
-    // })
   } catch (error) {
     next(error)
   }

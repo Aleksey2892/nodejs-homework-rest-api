@@ -1,10 +1,9 @@
-const userSubscription = ['free', 'pro', 'premium']
-
-const UserSchema = {
-  subscription: {
-    ENUM: userSubscription,
-    DEFAULT: userSubscription[0],
-  },
+const Subscriptions = {
+  values: ['free', 'pro', 'premium'],
+  default: 'free',
+  FREE: 'free',
+  PRO: 'pro',
+  PREMIUM: 'premium',
 }
 
-module.exports = { UserSchema, userSubscription }
+module.exports = { Subscriptions }

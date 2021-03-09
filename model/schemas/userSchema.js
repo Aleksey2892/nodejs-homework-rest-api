@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcryptjs')
-const { UserSchema } = require('../../helpers/constants')
+const { Subscriptions } = require('../../helpers/constants')
 
 const userSchema = new Schema(
   {
@@ -20,8 +20,11 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: UserSchema.subscription.ENUM,
-      default: UserSchema.subscription.DEFAULT,
+      enum: {
+        values: [Subscriptions.FREE, Subscriptions.PRO, Subscriptions.PREMIUM],
+        message: `Invalid values. Allowed values: ${Subscriptions.values}`,
+      },
+      default: Subscriptions.default,
     },
     token: {
       type: String,

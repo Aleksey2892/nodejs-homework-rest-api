@@ -19,7 +19,7 @@ const updateToken = (id, token) => {
 }
 
 const updateSubscription = (id, subscription) => {
-  return User.updateOne({ _id: id }, { subscription })
+  return User.findOneAndUpdate({ _id: id }, { subscription }, { new: true })
 }
 
 module.exports = {
